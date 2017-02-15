@@ -6,7 +6,7 @@ struct Example
   double x, y, z;
 };
 
-void out(std::ostream & s, const char * p, const Example & v) {
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, const Example & v) {
   if (*p == 'i')
     s << "[" << v.x << "; " << v.y << "; " << v.z <<"]";
   else
@@ -85,7 +85,7 @@ int main()
 
   // besides the normal print function that always outputs to stdout, there is
   // a function where you can specify the output strem
-  write(std::cerr, "Error message");
+  write(std::cerr, "Error message\n");
 
   // you can even specify a string and the function will append to that string
   std::string message = "Error message: ";
@@ -94,7 +94,18 @@ int main()
   // finally there is a function that will return a string
   message = format("%0% number", 42);
 
+  // you can also use other string types, besides the byte based ones
+  // print also automatically works with wide-characters
+  print(L"A wide Character format %0%\n", 123);
 
+  // other formats can be easily used with format
+  std::u32string u32string = format(U"32 bit wide encoded %0%", U"string");
+
+  // but you must make sure, that all types fit together...
+  // for example you can not format 32-bit character strings into 8-bit char strings
+  // u32string = format("32 bit wide encoded %0%", U"string");
+
+  // other combinations also might not work....
 
   // that is all there is.. if you need more... well .. do it yourself :)
   // the basic case where you use all placeholders only once and in order is

@@ -16,44 +16,44 @@ template <typename T> struct hex { hex(T v) : val(v) {} T val; };
 
 // a list of trivial output functions... all further ones you have to
 // provide on your own
-void out(std::ostream & s, const char * p, double v) { s << v; }
-void out(std::ostream & s, const char * p, float v) { s << v; }
-void out(std::ostream & s, const char * p, long double v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, double v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, float v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, long double v) { s << v; }
 
-void out(std::ostream & s, const char * p, uint8_t v)  { s << (uint32_t)v; }
-void out(std::ostream & s, const char * p, uint16_t v) { s << (uint32_t)v; }
-void out(std::ostream & s, const char * p, uint32_t v) { s << (uint32_t)v; }
-void out(std::ostream & s, const char * p, uint64_t v) { s << (uint64_t)v; }
-void out(std::ostream & s, const char * p, int8_t v)   { s << ( int32_t)v; }
-void out(std::ostream & s, const char * p, int16_t v)  { s << ( int32_t)v; }
-void out(std::ostream & s, const char * p, int32_t v)  { s << ( int32_t)v; }
-void out(std::ostream & s, const char * p, int64_t v)  { s << ( int64_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint8_t v)  { s << (uint32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint16_t v) { s << (uint32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint32_t v) { s << (uint32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint64_t v) { s << (uint64_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, int8_t v)   { s << ( int32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, int16_t v)  { s << ( int32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, int32_t v)  { s << ( int32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, int64_t v)  { s << ( int64_t)v; }
 
-void out(std::ostream & s, const char * p, hex<uint8_t> v)  { s << std::hex << (uint32_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<uint16_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<uint32_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<uint64_t> v) { s << std::hex << (uint64_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<int8_t> v)   { s << std::hex << ( int32_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<int16_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<int32_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
-void out(std::ostream & s, const char * p, hex<int64_t> v)  { s << std::hex << ( int64_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint8_t> v)  { s << std::hex << (uint32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint16_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint32_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint64_t> v) { s << std::hex << (uint64_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int8_t> v)   { s << std::hex << ( int32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int16_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int32_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int64_t> v)  { s << std::hex << ( int64_t)v.val << std::dec; }
 
-void out(std::ostream & s, const char * p, const char * v)   { s << v; }
-void out(std::ostream & s, const char * p, std::nullptr_t v) { s << "NULL"; }
-void out(std::ostream & s, const char * p, bool v)           { if (v) s << "true"; else s << "false"; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, const char * v)   { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, std::nullptr_t v) { s << "NULL"; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, bool v)           { if (v) s << "true"; else s << "false"; }
 
-void out(std::ostream & s, const char * p, const std::string & v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, const C * p, const std::string & v) { s << v; }
 
-// E is the escape character
-template <int E>
+// E is the escape character, C the type to use for characters
+template <int E, typename C>
 class Format {
-    std::ostream & stream;          // the stream to output to
-    int placeholderValueIndex = 0;  // the current placeholder value index that is fed in via operator%
-    int placeholderFormatIndex = 0; // the index of the placeholder index in the format string we are currently on
+    std::basic_ostream<C> & stream;     // the stream to output to
+    int placeholderValueIndex = 0;      // the current placeholder value index that is fed in via operator%
+    int placeholderFormatIndex = 0;     // the index of the placeholder index in the format string we are currently on
     bool storePlaceholderValue = false; // whether that placeholder has requested storage
-    std::vector<int> hardPlaceholders;   // indices of the stored placeholders
-    std::vector<std::ostringstream> hardPlaceholderValues; // stringstreams with the values of the current placeholders
-    const char * format;            // the format string
+    std::vector<int> hardPlaceholders;  // indices of the stored placeholders
+    std::vector<std::basic_ostringstream<C>> hardPlaceholderValues; // stringstreams with the values of the current placeholders
+    const C * format;                   // the format string
 
     // like the c++ container ... find E inside of the format string
     // if E is not inside format, advance to the null terminator
@@ -72,7 +72,7 @@ class Format {
     // the next placeholder
     void advance()
     {
-      const char * start = format;
+      const C * start = format;
 
       while (true)
       {
@@ -153,12 +153,14 @@ class Format {
 
   public:
 
-    Format(std::ostream & s, const char * f) : stream(s), format(f)
+    Format(std::basic_ostream<C> & s, const C * f) : stream(s), format(f)
     {
       // check for nullptr, if we get one we output nothing
       if (f == nullptr)
       {
-        format = "";
+        // well, this is ugly, is there no better way ???? TODO
+        static std::basic_string<C> str;
+        format = str.c_str();
       }
       else
       {
@@ -217,30 +219,34 @@ class Format {
 
 }
 
-template <int E = '%', typename... Ts>
-void write(std::ostream & str, const char * format, Ts ... a)
+/// TODO use string_view once the compilers support it
+
+/// write something to an output stream
+template <int E = '%', typename C, typename... Ts>
+void write(std::basic_ostream<C> & str, const C * format, Ts ... a)
 {
-  (internal::Format<E>(str, format) % ... % a);
+  (internal::Format<E, C>(str, format) % ... % a);
 }
 
-template <int E = '%', typename... Ts>
-void write(std::string & out, const char * format, Ts ... a)
+/// append something to a string
+template <int E = '%', typename C, typename... Ts>
+void write(std::basic_string<C> & out, const C * format, Ts ... a)
 {
-  std::ostringstream str;
+  std::basic_ostringstream<C> str;
   write<E>(str, format, a...);
   out += str.str();
 }
 
-template <int E = '%', typename... Ts>
-void print(const char * format, Ts ... a)
-{
-  write<E>(std::cout, format, a...);
-}
+/// print to std::cout or std::wcout
+template <int E = '%', typename... Ts> void print(const char    * format, Ts ... a) { write<E>(std::cout,  format, a...); }
+template <int E = '%', typename... Ts> void print(const wchar_t * format, Ts ... a) { write<E>(std::wcout, format, a...); }
 
-template <int E = '%', typename... Ts>
-std::string format(const char * format, Ts ... a)
+/// format and return the result as a string, the type of the result string depends
+/// on the type of the input string
+template <int E = '%', typename C, typename... Ts>
+std::basic_string<C> format(const C * format, Ts ... a)
 {
-  std::ostringstream str;
+  std::basic_ostringstream<C> str;
   write<E>(str, format, a...);
   return str.str();
 }
