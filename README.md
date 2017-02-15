@@ -11,6 +11,6 @@ on internationalisation and not the goal of actually formatting text.
 
 # documentation
 
-Have a look at the examples.cpp file for a detailed example with a lot of
+Have a look at the example.cpp file for a detailed example with a lot of
 explanations. As there is not much more functionality there is no more 
 documentation.
