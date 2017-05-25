@@ -285,10 +285,10 @@ std::basic_string<C> format(std::basic_string_view<C> f, Ts ... a)
 // format function overloads for some other types... need to do this because the above function
 // can not deduce C
 template <int E = '%', typename C, typename... Ts>
-std::basic_string<C> format(const C * f, Ts ... a) { return format(std::basic_string_view<std::remove_cv_t<C>>(f), a...); }
+std::basic_string<C> format(const C * f, Ts ... a) { return format<E>(std::basic_string_view<std::remove_cv_t<C>>(f), a...); }
 
 template <int E = '%', typename C, typename... Ts>
-std::basic_string<C> format(const std::basic_string<C> & f, Ts ... a) { return format((std::basic_string_view<C>)f, a...); }
+std::basic_string<C> format(const std::basic_string<C> & f, Ts ... a) { return format<E>((std::basic_string_view<C>)f, a...); }
 
 template <typename I> internal::hex<I> hex(I i) { return internal::hex<I>{i}; }
 
