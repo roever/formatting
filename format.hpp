@@ -6,7 +6,9 @@
 #include <algorithm>
 #include <utility>
 #include <tuple>
+#include <string_view>
 #include <string>
+#include <type_traits>
 
 namespace formatting {
 
@@ -16,53 +18,55 @@ template <typename T> struct hex { hex(T v) : val(v) {} T val; };
 
 // a list of trivial output functions... all further ones you have to
 // provide on your own
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, double v) { s << v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, float v) { s << v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, long double v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, double v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, float v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, long double v) { s << v; }
 
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint8_t v)  { s << (uint32_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint16_t v) { s << (uint32_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint32_t v) { s << (uint32_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, uint64_t v) { s << (uint64_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, int8_t v)   { s << ( int32_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, int16_t v)  { s << ( int32_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, int32_t v)  { s << ( int32_t)v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, int64_t v)  { s << ( int64_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, uint8_t v)  { s << (uint32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, uint16_t v) { s << (uint32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, uint32_t v) { s << (uint32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, uint64_t v) { s << (uint64_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, int8_t v)   { s << ( int32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, int16_t v)  { s << ( int32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, int32_t v)  { s << ( int32_t)v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, int64_t v)  { s << ( int64_t)v; }
 
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint8_t> v)  { s << std::hex << (uint32_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint16_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint32_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<uint64_t> v) { s << std::hex << (uint64_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int8_t> v)   { s << std::hex << ( int32_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int16_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int32_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, hex<int64_t> v)  { s << std::hex << ( int64_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<uint8_t> v)  { s << std::hex << (uint32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<uint16_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<uint32_t> v) { s << std::hex << (uint32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<uint64_t> v) { s << std::hex << (uint64_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<int8_t> v)   { s << std::hex << ( int32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<int16_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<int32_t> v)  { s << std::hex << ( int32_t)v.val << std::dec; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, hex<int64_t> v)  { s << std::hex << ( int64_t)v.val << std::dec; }
 
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, const char * v)   { s << v; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, std::nullptr_t v) { s << "NULL"; }
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, bool v)           { if (v) s << "true"; else s << "false"; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, const char * v)   { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, std::nullptr_t /*v*/) { s << "NULL"; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, bool v)           { if (v) s << "true"; else s << "false"; }
 
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, const std::string & v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, std::basic_string_view<C> v) { s << v; }
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, const std::basic_string<C> & v) { s << v; }
 
 // E is the escape character, C the type to use for characters
 template <int E, typename C>
 class Format {
     std::basic_ostream<C> & stream;     // the stream to output to
-    int placeholderValueIndex = 0;      // the current placeholder value index that is fed in via operator%
-    int placeholderFormatIndex = 0;     // the index of the placeholder index in the format string we are currently on
+    size_t placeholderValueIndex = 0;      // the current placeholder value index that is fed in via operator%
+    size_t placeholderFormatIndex = 0;     // the index of the placeholder index in the format string we are currently on
     bool storePlaceholderValue = false; // whether that placeholder has requested storage
     std::vector<int> hardPlaceholders;  // indices of the stored placeholders
     std::vector<std::basic_ostringstream<C>> hardPlaceholderValues; // stringstreams with the values of the current placeholders
-    const C * format;                   // the format string
+    std::basic_string_view<C> format;   // the format string
+    size_t position = 0;
 
     // like the c++ container ... find E inside of the format string
     // if E is not inside format, advance to the null terminator
     void skipToE()
     {
-      while (*format)
+      while (position < format.size())
       {
-        if (*format == E) return;
-        format++;
+        if (format[position] == E) return;
+        position++;
       }
     }
 
@@ -72,7 +76,7 @@ class Format {
     // the next placeholder
     void advance()
     {
-      const C * start = format;
+      auto start = position;
 
       while (true)
       {
@@ -80,16 +84,16 @@ class Format {
         skipToE();
 
         // output everything up to there
-        stream.write(start, format-start);
+        stream.write(format.data()+start, position-start);
 
         // check where we are
-        if (format[0] != 0 && format[1] == E)
+        if (position+1 < format.size() && format[position+1] == E)
         {
           // it was only an escaped escape character
           // output a single escape and skip over it
           // and continue outputting
-          start = format+1;
-          format += 2;
+          start = position+1;
+          position += 2;
         }
         else
         {
@@ -103,14 +107,14 @@ class Format {
     std::pair<int, bool> getPlaceholderIndex()
     {
       int ret = 0;
-      format++;
-      bool store = *format == 's';
-      if (store) format++;
+      position++;
+      bool store = format[position] == 's';
+      if (store) position++;
 
-      while (*format >= '0' && *format <= '9')
+      while (format[position] >= '0' && format[position] <= '9')
       {
-        ret = ret * 10 + *format - '0';
-        format++;
+        ret = ret * 10 + format[position] - '0';
+        position++;
       }
 
       return std::make_pair(ret, store);
@@ -125,14 +129,14 @@ class Format {
       while (true)
       {
         // skip current placeholder
-        skipToE();
-        if (*format == 0) return;
         // skip over the escape character of the end placeholder
-        format++;
-        if (*format == 0) return;
+        skipToE();
+        position++;
+        if (position >= format.size()) return;
+
         // output until next placeholder or end
         advance();
-        if (*format == 0) return;
+        if (position >= format.size()) return;
 
         // get the placeholder information
         std::tie(placeholderFormatIndex, storePlaceholderValue) = getPlaceholderIndex();
@@ -153,32 +157,22 @@ class Format {
 
   public:
 
-    Format(std::basic_ostream<C> & s, const C * f) : stream(s), format(f)
+    Format(std::basic_ostream<C> & s, std::basic_string_view<C> f) : stream(s), format(f)
     {
-      // check for nullptr, if we get one we output nothing
-      if (f == nullptr)
+      // output up to the first placeholder and prepare
+      // for that placeholder... except if there are no placeholder,
+      // then we have already output all there is
+      advance();
+      if (position < format.size())
       {
-        // well, this is ugly, is there no better way ???? TODO
-        static std::basic_string<C> str;
-        format = str.c_str();
-      }
-      else
-      {
-        // output up to the first placeholder and prepare
-        // for that placeholder... except if there are no placeholder,
-        // then we have already output all there is
-        advance();
-        if (*format)
-        {
-          std::tie(placeholderFormatIndex, storePlaceholderValue) = getPlaceholderIndex();
-        }
+        std::tie(placeholderFormatIndex, storePlaceholderValue) = getPlaceholderIndex();
       }
     }
 
     ~Format()
     {
       // output whatever is left, including placeholders
-      if (*format)
+      if (position < format.size())
       {
         // by setting the placeholder index to this big value
         // we make outputMore output all that is left
@@ -192,7 +186,7 @@ class Format {
     {
       // if we get additional arguments after all placeholders
       // have been handled, do nothing
-      if (*format)
+      if (position < format.size())
       {
         // check, if our current placeholder index is the one of
         // the current argument or if the placeholder requests storing
@@ -200,14 +194,14 @@ class Format {
         {
           // storing required, output into a string stream
           hardPlaceholderValues.emplace_back();
-          out(hardPlaceholderValues.back(), format, v);
+          out(hardPlaceholderValues.back(), format.substr(position), v);
           hardPlaceholders.resize(placeholderValueIndex+1);
           hardPlaceholders[placeholderValueIndex] = hardPlaceholderValues.size();
         }
 
         if (placeholderValueIndex == placeholderFormatIndex)
         {
-          out(stream, format, v);
+          out(stream, format.substr(position), v);
           outputMore();
         }
 
@@ -219,18 +213,16 @@ class Format {
 
 }
 
-/// TODO use string_view once the compilers support it
-
 /// write something to an output stream
 template <int E = '%', typename C, typename... Ts>
-void write(std::basic_ostream<C> & str, const C * format, Ts ... a)
+void write(std::basic_ostream<C> & str, std::basic_string_view<std::remove_cv_t<C>> format, Ts ... a)
 {
-  (internal::Format<E, C>(str, format) % ... % a);
+  (internal::Format<E, std::remove_cv_t<C>>(str, format) % ... % a);
 }
 
 /// append something to a string
 template <int E = '%', typename C, typename... Ts>
-void write(std::basic_string<C> & out, const C * format, Ts ... a)
+void write(std::basic_string<C> & out, std::basic_string_view<std::remove_cv_t<C>> format, Ts ... a)
 {
   std::basic_ostringstream<C> str;
   write<E>(str, format, a...);
@@ -238,18 +230,26 @@ void write(std::basic_string<C> & out, const C * format, Ts ... a)
 }
 
 /// print to std::cout or std::wcout
-template <int E = '%', typename... Ts> void print(const char    * format, Ts ... a) { write<E>(std::cout,  format, a...); }
-template <int E = '%', typename... Ts> void print(const wchar_t * format, Ts ... a) { write<E>(std::wcout, format, a...); }
+template <int E = '%', typename... Ts> void print(std::basic_string_view<char> format, Ts ... a) { write<E>(std::cout,  format, a...); }
+template <int E = '%', typename... Ts> void print(std::basic_string_view<wchar_t> format, Ts ... a) { write<E>(std::wcout, format, a...); }
 
 /// format and return the result as a string, the type of the result string depends
 /// on the type of the input string
 template <int E = '%', typename C, typename... Ts>
-std::basic_string<C> format(const C * format, Ts ... a)
+std::basic_string<C> format(std::basic_string_view<C> f, Ts ... a)
 {
   std::basic_ostringstream<C> str;
-  write<E>(str, format, a...);
+  write<E>(str, f, a...);
   return str.str();
 }
+
+// format function overloads for some other types... need to do this because the above function
+// can not deduce C
+template <int E = '%', typename C, typename... Ts>
+std::basic_string<C> format(const C * f, Ts ... a) { return format(std::basic_string_view<std::remove_cv_t<C>>(f), a...); }
+
+template <int E = '%', typename C, typename... Ts>
+std::basic_string<C> format(const std::basic_string<C> & f, Ts ... a) { return format((std::basic_string_view<C>)f, a...); }
 
 template <typename I> internal::hex<I> hex(I i) { return internal::hex<I>{i}; }
 

@@ -6,8 +6,8 @@ struct Example
   double x, y, z;
 };
 
-template <typename C> void out(std::basic_ostream<C> & s, const C * p, const Example & v) {
-  if (*p == 'i')
+template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> p, const Example & v) {
+  if (p[0] == 'i')
     s << "[" << v.x << "; " << v.y << "; " << v.z <<"]";
   else
     s << "{" << v.x << ", " << v.y << ", " << v.z <<"}";
@@ -22,7 +22,7 @@ int main()
   print("format integer %0%\n", 100);
 
   // the type doesn't matter, just add it to string and argument list
-  print("format with multiple types %0% %1% %2%\n", "test text", 23.4, 372834743L);
+  print("format with multiple types %0% %1% %2% %3% %4%\n", "test text", 23.4, 372834743L, std::string("string"), std::string_view("view"));
 
   // the order of the placeholders can be arbitrary and the arguments will be added accordingly
   // be aware though that this costs you quite a bit of performance
@@ -104,6 +104,13 @@ int main()
 
   // format and write also work with all string types
   std::u32string u32string = format(U"32 bit wide encoded %0%", U"string");
+
+  // you can also use strings and string_views as arguments with the format string
+  std::string fmt = "%0% number\n";
+  print(fmt, 43);
+  message = format(fmt, 44);  print(message);
+  print((std::string_view)fmt, 45);
+  message = format((std::string_view)fmt, 46); print(message);
 
   // but you must make sure, that all types fit together...
   //
