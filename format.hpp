@@ -15,6 +15,7 @@ namespace formatting {
 namespace internal {
 
 template <typename T> struct hex { hex(T v) : val(v) {} T val; };
+template <typename T> struct align { align(T v, size_t w, int p, char a) : val(v), width(w), padding(p), algn(a) {} T val; size_t width; int padding; char algn; };
 
 // a list of trivial output functions... all further ones you have to
 // provide on your own
@@ -46,6 +47,44 @@ template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view
 
 template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, std::basic_string_view<C> v) { s << v; }
 template <typename C> void out(std::basic_ostream<C> & s, std::basic_string_view<C> /*p*/, const std::basic_string<C> & v) { s << v; }
+
+template <typename C, typename A> void out(std::basic_ostream<C> & s, std::basic_string_view<C> p, const align<A> & v)
+{
+  std::basic_ostringstream<C> tmp;
+  out(tmp, p, v.val);
+
+  std::basic_string<C> st = tmp.str();
+
+  if (st.size() < v.width)
+  {
+    switch (v.algn)
+    {
+      case 'c':
+        {
+          size_t c = v.width - st.size();
+          s << std::basic_string<C>(c/2, v.padding);
+          c = c-c/2;
+          s << st;
+          s << std::basic_string<C>(c, v.padding);
+        }
+        break;
+
+      case 'l':
+        s << st;
+        s << std::basic_string<C>(v.width - st.size(), v.padding);
+        break;
+
+      default:
+        s << std::basic_string<C>(v.width - st.size(), v.padding);
+        s << st;
+        break;
+    }
+  }
+  else
+  {
+    s << st;
+  }
+}
 
 // E is the escape character, C the type to use for characters
 template <int E, typename C>
@@ -253,5 +292,15 @@ std::basic_string<C> format(const std::basic_string<C> & f, Ts ... a) { return f
 
 template <typename I> internal::hex<I> hex(I i) { return internal::hex<I>{i}; }
 
+template <typename I> internal::align<I> align(I i, size_t w) {
+  if constexpr (std::is_integral_v<I>)
+    return internal::align<I>{i, w, '0', 'r'};
+  else
+    return internal::align<I>{i, w, ' ', 'r'};
 }
 
+template <typename I> internal::align<I> align(I i, size_t w, int padding, char align) {
+  return internal::align<I>{i, w, padding, align};
+}
+
+}

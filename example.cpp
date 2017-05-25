@@ -112,7 +112,20 @@ int main()
   print((std::string_view)fmt, 45);
   message = format((std::string_view)fmt, 46); print(message);
 
-  // but you must make sure, that all types fit together...
+  // alignment out output is provided using the function align
+  // in its most basic form you can specify a width, integral types are automatically
+  // padded with 0s all others with spaces, alignment is always right
+  print("Test padded to 11 characters, |%0%|, |%1%|\n", align(100, 11), align("text", 11));
+
+  // if you need more provide all arguments
+  print(L"Test padded to 11 characters, |%0%|, |%1%|\n", align(100, 11, '.', 'c'), align("text", 11, '-', 'l'));
+
+  // be aware though that this is quite limited:
+  // - no multi byte utf8 sequences can be used for padding
+  // - string length is measured in basic units, e.g. bytes for utf8
+  // but it might be good enough to align numbers, positive numbers that is :)
+
+  // one final remark: you must make sure, that all types fit together...
   //
   // for example you can not format 32-bit character strings into 8-bit char strings
   // u32string = format("32 bit wide encoded %0%", U"string");
