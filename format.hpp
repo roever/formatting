@@ -55,7 +55,7 @@ class Format {
     size_t placeholderFormatIndex = 0;     // the index of the placeholder index in the format string we are currently on
     bool storePlaceholderValue = false; // whether that placeholder has requested storage
     std::vector<int> hardPlaceholders;  // indices of the stored placeholders
-    std::vector<std::basic_ostringstream<C>> hardPlaceholderValues; // stringstreams with the values of the current placeholders
+    std::vector<std::basic_string<C>> hardPlaceholderValues; // stringstreams with the values of the current placeholders
     std::basic_string_view<C> format;   // the format string
     size_t position = 0;
 
@@ -148,9 +148,7 @@ class Format {
         // if not found... well output nothing
         if (hardPlaceholders.size() > placeholderFormatIndex && hardPlaceholders[placeholderFormatIndex])
         {
-          // TODO this unnecessarily makes a copy... yuck there
-          // must be a way around that
-          stream << hardPlaceholderValues[hardPlaceholders[placeholderFormatIndex]-1].rdbuf()->str();
+          stream << hardPlaceholderValues[hardPlaceholders[placeholderFormatIndex]-1];
         }
       }
     }
@@ -193,8 +191,10 @@ class Format {
         if (placeholderValueIndex != placeholderFormatIndex || storePlaceholderValue)
         {
           // storing required, output into a string stream
-          hardPlaceholderValues.emplace_back();
-          out(hardPlaceholderValues.back(), format.substr(position), v);
+          std::basic_ostringstream<C> tmp;
+          out(tmp, format.substr(position), v);
+
+          hardPlaceholderValues.emplace_back(tmp.str());
           hardPlaceholders.resize(placeholderValueIndex+1);
           hardPlaceholders[placeholderValueIndex] = hardPlaceholderValues.size();
         }
