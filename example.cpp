@@ -143,9 +143,7 @@ int main()
   //
   // with the byte strings there is no limitation to ascii, except that the escape
   // character needs to be encodable as a single byte character, so utf-8 can be used with that
-  //
-  // you might wonder, why there is no width adjustment (e.g something like printfs %05i)? because
-  // such a width operator is dependent on encoding. It needs to behave differently depending
-  // on whether you use utf-8 or an ASCII variation.. and quite complicated with unicode due to
-  // combining characters and such stuff.... maybe later on
+
+  return 0;
 }
+
