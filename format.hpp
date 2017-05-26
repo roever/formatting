@@ -119,7 +119,7 @@ class Format {
 
       while (true)
       {
-        // find nect possible placeholder start
+        // find next possible placeholder start
         skipToE();
 
         // output everything up to there
@@ -161,7 +161,7 @@ class Format {
 
     // output all of the remaining format string that we can
     // this function assumes that format points somewhere behind
-    // the start excape character of the placeholder... maybe even
+    // the start escape character of the placeholder... maybe even
     // directly to the end escape of the placeholder
     void outputMore()
     {
