@@ -97,6 +97,7 @@ class Format {
     std::vector<std::basic_string<C>> hardPlaceholderValues; // stringstreams with the values of the current placeholders
     std::basic_string_view<C> format;   // the format string
     size_t position = 0;
+    bool partial;                       // keep placeholders without replacement
 
     // like the c++ container ... find E inside of the format string
     // if E is not inside format, advance to the null terminator
@@ -159,11 +160,26 @@ class Format {
       return std::make_pair(ret, store);
     }
 
+    // output replacement placeholder, if requested
+    void outputReplacement(void)
+    {
+      if (partial)
+      {
+        // output replacement placeholder... the number is reduced by the
+        // number of replacements already provided
+        if (storePlaceholderValue)
+          stream << (C)E << (C)'s' << placeholderFormatIndex-placeholderValueIndex << (C)E;
+        else
+          stream << (C)E << placeholderFormatIndex-placeholderValueIndex << (C)E;
+      }
+    }
+
     // output all of the remaining format string that we can
     // this function assumes that format points somewhere behind
     // the start escape character of the placeholder... maybe even
     // directly to the end escape of the placeholder
-    void outputMore()
+    // when finish is true, everything is output, even unknown placeholders
+    void outputMore(bool finish)
     {
       while (true)
       {
@@ -181,20 +197,24 @@ class Format {
         std::tie(placeholderFormatIndex, storePlaceholderValue) = getPlaceholderIndex();
 
         // if the index of the new placeholder is not reached yet, exit
-        if (placeholderFormatIndex > placeholderValueIndex) return;
+        if (!finish && (placeholderFormatIndex > placeholderValueIndex)) return;
 
         // find the placeholder in the stored list and output it
         // if not found... well output nothing
-        if (hardPlaceholders.size() > placeholderFormatIndex && hardPlaceholders[placeholderFormatIndex])
+        if ((hardPlaceholders.size() > placeholderFormatIndex) && hardPlaceholders[placeholderFormatIndex])
         {
           stream << hardPlaceholderValues[hardPlaceholders[placeholderFormatIndex]-1];
+        }
+        else
+        {
+          outputReplacement();
         }
       }
     }
 
   public:
 
-    Format(std::basic_ostream<C> & s, std::basic_string_view<C> f) : stream(s), format(f)
+    Format(std::basic_ostream<C> & s, std::basic_string_view<C> f, bool p) : stream(s), format(f), partial(p)
     {
       // output up to the first placeholder and prepare
       // for that placeholder... except if there are no placeholder,
@@ -208,13 +228,11 @@ class Format {
 
     ~Format()
     {
-      // output whatever is left, including placeholders
       if (position < format.size())
       {
-        // by setting the placeholder index to this big value
-        // we make outputMore output all that is left
-        placeholderValueIndex = std::numeric_limits<int>::max();
-        outputMore();
+        outputReplacement();
+        // output whatever is left, including placeholders
+        outputMore(true);
       }
     }
 
@@ -241,7 +259,7 @@ class Format {
         if (placeholderValueIndex == placeholderFormatIndex)
         {
           out(stream, format.substr(position), v);
-          outputMore();
+          outputMore(false);
         }
 
         placeholderValueIndex++;
@@ -250,13 +268,21 @@ class Format {
     }
 };
 
+
+template <int E, typename C, typename... Ts>
+void write(std::basic_ostream<C> & str, std::basic_string_view<std::remove_cv_t<C>> format, bool partial, Ts ... a)
+{
+  (internal::Format<E, std::remove_cv_t<C>>(str, format, partial) % ... % a);
+}
+
+
 }
 
 /// write something to an output stream
 template <int E = '%', typename C, typename... Ts>
 void write(std::basic_ostream<C> & str, std::basic_string_view<std::remove_cv_t<C>> format, Ts ... a)
 {
-  (internal::Format<E, std::remove_cv_t<C>>(str, format) % ... % a);
+  internal::write<E, C>(str, format, false, a...);
 }
 
 /// append something to a string
@@ -264,13 +290,13 @@ template <int E = '%', typename C, typename... Ts>
 void write(std::basic_string<C> & out, std::basic_string_view<std::remove_cv_t<C>> format, Ts ... a)
 {
   std::basic_ostringstream<C> str;
-  write<E>(str, format, a...);
+  internal::write<E>(str, format, true, a...);
   out += str.str();
 }
 
 /// print to std::cout or std::wcout
-template <int E = '%', typename... Ts> void print(std::basic_string_view<char> format, Ts ... a) { write<E>(std::cout,  format, a...); }
-template <int E = '%', typename... Ts> void print(std::basic_string_view<wchar_t> format, Ts ... a) { write<E>(std::wcout, format, a...); }
+template <int E = '%', typename... Ts> void print(std::basic_string_view<char> format, Ts ... a) { internal::write<E>(std::cout, format, false, a...); }
+template <int E = '%', typename... Ts> void print(std::basic_string_view<wchar_t> format, Ts ... a) { internal::write<E>(std::wcout, format, false, a...); }
 
 /// format and return the result as a string, the type of the result string depends
 /// on the type of the input string
@@ -278,7 +304,7 @@ template <int E = '%', typename C, typename... Ts>
 std::basic_string<C> format(std::basic_string_view<C> f, Ts ... a)
 {
   std::basic_ostringstream<C> str;
-  write<E>(str, f, a...);
+  internal::write<E>(str, f, true, a...);
   return str.str();
 }
 

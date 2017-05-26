@@ -33,9 +33,9 @@ int main()
   test("test  100 muh 1c6 blabn",
        "test  %0% %1% %2% blabn", 100, "muh", formatting::hex(454), 304, "ttt" );
 
-  // too little formats
-  test("test  100   blabn",
-       "test  %0% %1% %2% blabn", 100 );
+  // too little formats and escape
+  test("test  100 %0% %1% blabn % ",
+       "test  %0% %1% %2% blabn %% ", 100 );
 
   // strange formats
   test("100 200 300",

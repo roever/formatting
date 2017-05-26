@@ -109,8 +109,18 @@ int main()
   std::string fmt = "%0% number\n";
   print(fmt, 43);
   message = format(fmt, 44);  print(message);
+
   print((std::string_view)fmt, 45);
   message = format((std::string_view)fmt, 46); print(message);
+
+  // all function except for the print function will output placeholders
+  // in such a way that the output string is again a format string
+  // with valid placeholders so that you can replace the placeholders one after
+  // the other in separate function calls
+  fmt = "string %s1% with %0% %1% multiple %2% placeholders\n";
+  fmt = format(fmt, "000");
+  fmt = format(fmt, "111");
+  print(fmt, "222");
 
   // alignment out output is provided using the function align
   // in its most basic form you can specify a width, integral types are automatically
