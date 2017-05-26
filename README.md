@@ -6,7 +6,7 @@ on internationalisation and not the goal of actually formatting text.
 - placeholders are numbered
 - placeholders require no type information, this is all taken directly from the values to add
 - nearly as fast as printf (half as fast for simple strings) boost::format is only a tenth as fast as printf
-- I intentionally left out text width formatting as this requires encoding specific knowledge
+- I implemented only a basic form of alignment as proper formatting is quite complicated
 
 
 # documentation
